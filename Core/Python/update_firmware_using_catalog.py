@@ -163,8 +163,8 @@ def create_or_refresh_catalog(ip_address, headers, **kwargs):
         if allrepoProfiles is not None and data["@odata.count"] != 0:
             for repoProfile in allrepoProfiles:
                 repositoryType = repoProfile["Repository"]["RepositoryType"]
-                if(repositoryType == ARGS.repotype):
-                    if ARGS.force == "True":
+                if(repositoryType == kwargs['repo_type']):
+                    if kwargs['force']:
                         url = 'https://%s/api/UpdateService/Actions/UpdateService.RefreshCatalogs' % ip_address
                         refresh_payload = catalog_refresh_payload(repoProfile["Id"])
                         status, data = request(url=url,
@@ -616,7 +616,7 @@ if __name__ == '__main__':
                         help="domian for CIFS repository credentials")
     PARSER.add_argument("--repopassword", required=False,
                         help="password for CIFS repository")
-    PARSER.add_argument("--force", required=False, default=False,
+    PARSER.add_argument("--force", required=False, default=False, type=bool,
                         help="deletes online catalog and associated "
                              "baselines before creating afresh")
     ARGS = PARSER.parse_args()
@@ -692,7 +692,7 @@ if __name__ == '__main__':
             create_or_refresh_catalog(ip_address=IP_ADDRESS, headers=HEADERS, repo_type=ARGS.repotype,
                              repo_source_ip=ARGS.reposourceip, catalog_path=ARGS.catalogpath,
                              repo_user=ARGS.repouser, repo_password=ARGS.repopassword,
-                             repo_domain=ARGS.repodomain)
+                             repo_domain=ARGS.repodomain, force=ARGS.force)
         if CATALOG_ID:
             print("Successfully created or refreshed the catalog")
         else:
