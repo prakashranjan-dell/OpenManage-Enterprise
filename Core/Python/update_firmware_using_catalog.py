@@ -705,7 +705,7 @@ if __name__ == '__main__':
         if BASELINE_ID == 0:
             raise Exception("Unable to create baseline")
         print("Successfully created baseline")
-        
+
         COMPLIANCE_LIST = \
             check_device_compliance_report(ip_address=IP_ADDRESS, headers=HEADERS,
                                            id_baseline=BASELINE_ID, required_action=UPDATE_ACTIONS)
