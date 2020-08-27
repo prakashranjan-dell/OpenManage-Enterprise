@@ -59,20 +59,18 @@ class GetDeviceList:
             if not self.AUTH_SUCCESS:
                 print("Unable to authenticate with OME .. Check IP/Username/Pwd")
                 return
-        except OSError:
+        except Exception:
             print("Unable to connect to OME appliance %s" % self.__session_input["ip"])
-            print("Unexpected error:", sys.exc_info())
             return
 
         try:
             if self.__get_device_list() is False:
                 print("Get device list failed.")
                 return
-        except OSError as get_ex:
+        except Exception as get_ex:
             print("Unable to get device list from OME appliance %s" % self.__session_input["ip"])
             print(get_ex)
             return
-        print("Get device list passed. ")
         if self.__output_details["format"] == 'json':
             self.__format_json()
         elif self.__output_details["format"] == 'csv':
@@ -193,7 +191,7 @@ if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=RawTextHelpFormatter)
     PARSER.add_argument("--ip", "-i", required=True, help="OME Appliance IP")
-    PARSER.add_argument("--user", "-u", required=True,
+    PARSER.add_argument("--user", "-u", required=False,
                         help="Username for OME Appliance", default="admin")
     PARSER.add_argument("--password", "-p", required=True,
                         help="Password for OME Appliance")
